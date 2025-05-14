@@ -6,7 +6,8 @@
     "dist": "npx tsc",
     "dev": "nodemon server.ts",
     "start": "node dist/server.js",
-    "prepare": "husky"
+    "prepare": "husky && husky install",
+    "test": "echo \"No tests yet\""
   },
   "keywords": [],
   "author": "",
@@ -16,7 +17,7 @@
     "@commitlint/cli": "^19.8.1",
     "@commitlint/config-conventional": "^19.8.1",
     "@types/node": "^22.15.18",
-    "husky": "^9.1.7",
+    "husky": "^8.0.0",
     "lint-staged": "^16.0.0",
     "nodemon": "^3.1.10",
     "ts-node": "^10.9.2",
