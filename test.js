@@ -1,0 +1,1 @@
+console.log("Husky setup is completed: ")
