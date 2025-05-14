@@ -1,7 +1,7 @@
 module.exports = {
-    extends: ['@commitlint/cli','@commitlint/config-conventional'],
+    extends: ["@commitlint/cli", "@commitlint/config-conventional"],
     rules: {
-        "type-enum":[
+        "type-enum": [
             2,
             "always",
             [
@@ -18,6 +18,6 @@ module.exports = {
                 "revert"
             ]
         ],
-        "subject-case":[2, "always", ["sentence-case"]], 
+        "subject-case": [2, "always", "sentence-case"],
     }
 }
