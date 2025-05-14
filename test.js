@@ -1,1 +1,1 @@
-console.log("Husky setup is completed: ")
+console.log("This test script")
