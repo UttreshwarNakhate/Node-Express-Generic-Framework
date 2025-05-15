@@ -4,12 +4,12 @@
     "main": "server.ts",
     "scripts": {
         "dist": "npx tsc",
-        "dev": "nodemon server.ts",
-        "start": "node dist/server.js",
+        "dev": "cross-env NODE_ENV=development nodemon src/server.ts",
+        "start": "cross-env NODE_ENV=production node dist/server.js",
         "lint": "eslint .",
         "lint:fix": "eslint . --fix",
-        "format:check":"prettier . --check",
-        "format:fix":"prettier . --fix",
+        "format:check": "prettier . --check",
+        "format:fix": "prettier . --fix",
         "prepare": "husky && husky install",
         "test": "echo \"No tests yet\""
     },
@@ -28,6 +28,7 @@
         "@commitlint/config-conventional": "^19.8.1",
         "@eslint/js": "^9.26.0",
         "@types/node": "^22.15.18",
+        "cross-env": "^7.0.3",
         "eslint": "^9.26.0",
         "eslint-config-prettier": "^10.1.5",
         "husky": "^8.0.0",
@@ -37,5 +38,9 @@
         "ts-node": "^10.9.2",
         "typescript": "^5.8.3",
         "typescript-eslint": "^8.32.1"
+    },
+    "dependencies": {
+        "dotenv-flow": "^4.1.0",
+        "express": "^5.1.0"
     }
 }
