@@ -1,4 +1,5 @@
 {
+<<<<<<< HEAD
     "name": "Generic Framework",
     "version": "1.0.0",
     "main": "server.ts",
@@ -39,3 +40,40 @@
         "typescript-eslint": "^8.32.1"
     }
 }
+=======
+  "name": "Generic Framework",
+  "version": "1.0.0",
+  "main": "server.ts",
+  "scripts": {
+    "dist": "npx tsc",
+    "dev": "nodemon server.ts",
+    "start": "node dist/server.js",
+    "prepare": "husky && husky install",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "test": "echo \"No tests yet\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "lint-staged": {
+    "*.ts": [
+      "npm run lint:fix"
+    ]
+  },
+  "description": "",
+  "devDependencies": {
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
+    "@eslint/js": "^9.26.0",
+    "@types/node": "^22.15.18",
+    "eslint": "^9.26.0",
+    "husky": "^8.0.0",
+    "lint-staged": "^16.0.0",
+    "nodemon": "^3.1.10",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3",
+    "typescript-eslint": "^8.32.1"
+  }
+}
+>>>>>>> b9bebdb683e7d82818ba44e3cefe49c0b9e48d3d
