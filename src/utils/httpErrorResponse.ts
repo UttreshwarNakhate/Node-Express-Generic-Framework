@@ -3,6 +3,7 @@ import { THttpError } from '../types'
 import envConfig from '../config/env.config'
 import { Request } from 'express'
 import { SOMETHING_WENT_WRONG } from '../constant/messages.constant'
+import logger from '../config/logger'
 
 // eslint-disable-next-line @typescript-eslint/no-redundant-type-constituents
 export default (err: Error | unknown, req: Request, responseStatusCode: number): THttpError => {
@@ -18,10 +19,9 @@ export default (err: Error | unknown, req: Request, responseStatusCode: number):
         data: null,
         trace: err instanceof Error ? { error: err.stack } : null
     }
-
-    // console.info('Controller_Error', {
-    //     meta: responseError
-    // })
+    logger.info('Controller_Error', {
+        meta: responseError
+    })
 
     // production env check
     if (envConfig.ENV === EApplicationEnvironment.PRODUCTION) {

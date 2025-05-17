@@ -1,9 +1,10 @@
 import DotenvFlow from 'dotenv-flow'
 DotenvFlow.config()
 
-// console.log(process.env)
-
 export default {
+    // To check the environment
+    ENV: process.env.ENV,
+
     // The port on which the server will run
     APP_PORT: process.env.APP_PORT,
 

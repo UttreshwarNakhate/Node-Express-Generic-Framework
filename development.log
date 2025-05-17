@@ -1,0 +1,30 @@
+{
+    "level": "INFO",
+    "message": "APPLICATION_STARTED",
+    "timestamp": "2025-05-17T14:53:20.073Z",
+    "meta": {
+        "PORT": "3000",
+        "BACKEND_URL": "http://localhost:3000"
+    }
+}
+{
+    "level": "INFO",
+    "message": "Server is listening on port: 3000",
+    "timestamp": "2025-05-17T14:53:20.081Z",
+    "meta": {}
+}
+{
+    "level": "INFO",
+    "message": "APPLICATION_STARTED",
+    "timestamp": "2025-05-17T14:54:10.740Z",
+    "meta": {
+        "PORT": "3000",
+        "BACKEND_URL": "http://localhost:3000"
+    }
+}
+{
+    "level": "INFO",
+    "message": "Server is listening on port: 3000",
+    "timestamp": "2025-05-17T14:54:10.754Z",
+    "meta": {}
+}

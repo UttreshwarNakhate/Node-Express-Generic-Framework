@@ -2,6 +2,7 @@ import { EApplicationEnvironment } from '../constant/application.constant'
 import { THttpResponse } from '../types'
 import envConfig from '../config/env.config'
 import { Request, Response } from 'express'
+import logger from '../config/logger'
 
 export default (req: Request, res: Response, responseStatusCode: number, responseMessage: string, data: unknown = null): void => {
     const response: THttpResponse = {
@@ -15,10 +16,9 @@ export default (req: Request, res: Response, responseStatusCode: number, respons
         message: responseMessage,
         data: data
     }
-
-    // console.info('Controller_Response', {
-    //     meta: response
-    // })
+    logger.info('Controller_Response', {
+        meta: response
+    })
 
     // production env check
     if (envConfig.ENV === EApplicationEnvironment.PRODUCTION) {
