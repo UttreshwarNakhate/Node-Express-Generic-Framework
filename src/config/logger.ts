@@ -5,28 +5,63 @@ import { ConsoleTransportInstance, FileTransportInstance } from 'winston/lib/win
 import envConfig from '../config/env.config'
 import path from 'path'
 import * as SourceMapSupport from 'source-map-support'
+import { blue, bold, green, magenta, red, yellow } from 'colorette'
 
 // Linking trace support
 SourceMapSupport.install()
 
+// Following function is used to show date and time with 12 hours format
+const getFormattedTimestamp = (): string => {
+    const now = new Date()
+    const pad = (n: number) => n.toString().padStart(2, '0')
+
+    let hours = now.getHours()
+    const ampm = hours >= 12 ? 'PM' : 'AM'
+    hours = hours % 12
+    hours = hours === 0 ? 12 : hours
+
+    return (
+        `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ` +
+        `${pad(hours)}:${pad(now.getMinutes())}:${pad(now.getSeconds())} ${ampm}`
+    )
+}
+
 // This function is used to print the log in console
 const consoleLogFormat = format.printf((info) => {
-    const { level, message, timestamp, meta = {} } = info
+    const { level, message, meta = {} } = info
 
     const customLevel = level.toUpperCase()
 
-    const customeTimestamp = timestamp
+    const customeTimestamp = green(getFormattedTimestamp())
 
     const customeMessage = message
 
     const customMeta = util.inspect(meta, {
         showHidden: false,
-        depth: null
+        depth: null,
+        colors: true
     })
 
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    const cunstomLog = `${customLevel} [${customeTimestamp}] ${customeMessage}\n${'META'} ${customMeta}`
-    return cunstomLog
+    const cunstomLog = `[ ${customLevel} | [${customeTimestamp}] | ${customeMessage} | [${magenta('META: ')}  ${customMeta}] ]`
+
+    // Apply full line color based on level
+    let cunstomColoredLog: string
+    switch (customLevel) {
+        case 'ERROR':
+            cunstomColoredLog = red(bold(cunstomLog))
+            break
+        case 'INFO':
+            cunstomColoredLog = blue(bold(cunstomLog))
+            break
+        case 'WARN':
+            cunstomColoredLog = yellow(bold(cunstomLog))
+            break
+        default:
+            cunstomColoredLog = bold(cunstomLog)
+    }
+
+    return cunstomColoredLog
 })
 
 // This transport is used to console the info, error, warning
