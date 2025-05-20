@@ -1,6 +1,10 @@
-import { Router } from 'express'
-import self from '../controllers/auth-controller'
-const authRoutes = Router()
+import express from 'express'
+import { register, getUserInfoByUserId } from '../controllers/auth-controller'
 
-authRoutes.get('/self', self)
+// Create an instance of Express Router
+const authRoutes = express.Router()
+
+authRoutes.post('/register', register)
+authRoutes.post('/getUserByUserId', getUserInfoByUserId)
+
 export default authRoutes

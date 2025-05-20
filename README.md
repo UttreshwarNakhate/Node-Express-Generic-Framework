@@ -21,3 +21,7 @@ Multiple Transports: Supports various storage options for logs, including consol
 4.Extensibility: Allows for custom transports and formats to meet specific needs.
 5.Integration: Can be combined with other tools like Morgan for HTTP request logging.
 6.Rotation: Supports log file rotation based on date or size, with automatic deletion of older logs.
+
+##winstone-mongodb
+winston-mongodb is a Node.js library that enables logging to MongoDB within applications using the popular winston logging library. It functions as a transport for winston, allowing log messages to be stored as documents within a specified MongoDB collection. This centralized storage provides features like querying, indexing, and analysis of logs, useful for debugging, monitoring, and understanding application behavior.
+A helpful way to think about it is that winston-mongodb acts as a bridge, connecting your winston logger to your MongoDB database, making it easy to store logs in a structured, searchable format.

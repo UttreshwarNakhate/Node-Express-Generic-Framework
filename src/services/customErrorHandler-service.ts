@@ -17,7 +17,9 @@ const customErrorHandler = {
 
     notFound: (msg = '404 Not Found') => createCustomError(404, msg),
 
-    serverError: (msg = 'Internal server error') => createCustomError(500, msg)
+    serverError: (msg = 'Internal server error') => createCustomError(500, msg),
+
+    validationFailed: (msg = 'Internal server error') => createCustomError(400, msg)
 }
 
 export default customErrorHandler

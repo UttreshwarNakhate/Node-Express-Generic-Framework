@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-base-to-string */
 import { EApplicationEnvironment } from './../constant/application.constant'
 import { createLogger, format, transports } from 'winston'
 import util from 'util'
@@ -10,61 +11,42 @@ import { blue, bold, green, magenta, red, yellow } from 'colorette'
 // Linking trace support
 SourceMapSupport.install()
 
-// Following function is used to show date and time with 12 hours format
+// Date/time formatter (12-hour format)
 const getFormattedTimestamp = (): string => {
     const now = new Date()
     const pad = (n: number) => n.toString().padStart(2, '0')
-
     let hours = now.getHours()
     const ampm = hours >= 12 ? 'PM' : 'AM'
-    hours = hours % 12
-    hours = hours === 0 ? 12 : hours
-
-    return (
-        `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ` +
-        `${pad(hours)}:${pad(now.getMinutes())}:${pad(now.getSeconds())} ${ampm}`
-    )
+    hours = hours % 12 || 12
+    return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())} ${pad(hours)}:${pad(now.getMinutes())}:${pad(now.getSeconds())} ${ampm}`
 }
 
-// This function is used to print the log in console
+// Console log format
 const consoleLogFormat = format.printf((info) => {
     const { level, message, meta = {} } = info
-
     const customLevel = level.toUpperCase()
+    const timestamp = green(getFormattedTimestamp())
+    const metaString = util.inspect(meta, { showHidden: false, depth: null, colors: true })
+     
 
-    const customeTimestamp = green(getFormattedTimestamp())
-
-    const customeMessage = message
-
-    const customMeta = util.inspect(meta, {
-        showHidden: false,
-        depth: null,
-        colors: true
-    })
+    const printableMessage = typeof message === 'object' ? util.inspect(message, { depth: null, colors: true }) : message
 
     // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-    const cunstomLog = `[ ${customLevel} | [${customeTimestamp}] | ${customeMessage} | [${magenta('META: ')}  ${customMeta}] ]`
+    const baseLog = `[ ${customLevel} | [${timestamp}] | ${printableMessage} | [${magenta('META:')} ${metaString}] ]`
 
-    // Apply full line color based on level
-    let cunstomColoredLog: string
     switch (customLevel) {
         case 'ERROR':
-            cunstomColoredLog = red(bold(cunstomLog))
-            break
+            return red(bold(baseLog))
         case 'INFO':
-            cunstomColoredLog = blue(bold(cunstomLog))
-            break
+            return blue(bold(baseLog))
         case 'WARN':
-            cunstomColoredLog = yellow(bold(cunstomLog))
-            break
+            return yellow(bold(baseLog))
         default:
-            cunstomColoredLog = bold(cunstomLog)
+            return bold(baseLog)
     }
-
-    return cunstomColoredLog
 })
 
-// This transport is used to console the info, error, warning
+// Console transport
 const consoleTransport = (): Array<ConsoleTransportInstance> => {
     if (envConfig.ENV === EApplicationEnvironment.DEVELOPMENT) {
         return [
@@ -77,46 +59,52 @@ const consoleTransport = (): Array<ConsoleTransportInstance> => {
     return []
 }
 
-// This function is used to rint the logs in logs file
+// File log format
 const fileLogFormat = format.printf((info) => {
     const { level, message, timestamp, meta = {} } = info
-
     const logMeta: Record<string, unknown> = {}
 
     for (const [key, value] of Object.entries(meta as Record<string, unknown>)) {
-        if (value instanceof Error) {
-            logMeta[key] = {
-                name: value.name,
-                message: value.message,
-                trace: value.stack || ''
-            }
-        } else {
-            logMeta[key] = value
+        logMeta[key] = value instanceof Error ? { name: value.name, message: value.message, trace: value.stack || '' } : (value as Error)
+    }
+
+    return util.inspect(
+        {
+            level: level.toUpperCase(),
+            message,
+            timestamp,
+            meta: logMeta
+        },
+        {
+            showHidden: false,
+            depth: null,
+            colors: false,
+            compact: false
         }
-    }
-    const logData = {
-        level: level.toUpperCase(),
-        message,
-        timestamp,
-        meta: logMeta
-    }
-    return JSON.stringify(logData, null, 4)
+    )
+
+    // return JSON.stringify(
+    //     {
+    //         level: level.toUpperCase(),
+    //         message,
+    //         timestamp,
+    //         meta: logMeta
+    //     },
+    //     null,
+    //     4
+    // )
 })
 
-// This transport is used to create the error and info logs files to root directory
-const fileTransport = (): Array<FileTransportInstance> => {
-    return [
-        new transports.File({
-            filename: path.join(__dirname, '../', '../', 'logs', `${envConfig.ENV}.log`),
-            level: 'info',
-            format: format.combine(format.timestamp(), fileLogFormat)
-        })
-    ]
-}
+// File transport
+const fileTransport = (): Array<FileTransportInstance> => [
+    new transports.File({
+        filename: path.join(__dirname, '../', '../', 'logs', `${envConfig.ENV}.log`),
+        level: 'info',
+        format: format.combine(format.timestamp(), fileLogFormat)
+    })
+]
 
 export default createLogger({
-    defaultMeta: {
-        meta: {}
-    },
+    defaultMeta: { meta: {} },
     transports: [...fileTransport(), ...consoleTransport()]
 })
